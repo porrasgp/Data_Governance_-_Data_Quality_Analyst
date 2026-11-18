@@ -1,0 +1,9 @@
+relationship 5e05c10c-420b-471d-bb83-fcdf6ac75b93
+	joinOnDateBehavior: datePartOnly
+	fromColumn: raw_data_ERP.InvoiceDate
+	toColumn: LocalDateTable_d2434ed1-5233-4a3d-8bb1-4eecaf791276.Date
+
+relationship AutoDetected_569fe136-746e-4356-b372-18d14740587a
+	fromColumn: raw_data_ERP.CustomerID
+	toColumn: dim_cliente_ERP.CustomerID
+

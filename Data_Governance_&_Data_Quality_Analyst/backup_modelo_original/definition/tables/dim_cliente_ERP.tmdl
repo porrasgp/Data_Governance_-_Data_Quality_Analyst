@@ -1,0 +1,48 @@
+table dim_cliente_ERP
+	lineageTag: 64ef921f-3945-4cb1-8a2c-85b0ca102de1
+
+	column CustomerID
+		dataType: int64
+		formatString: 0
+		lineageTag: 0a29273b-1991-4ec6-a14c-dae1341f7cb9
+		summarizeBy: none
+		sourceColumn: CustomerID
+
+		annotation SummarizationSetBy = Automatic
+
+	column NombreCliente
+		dataType: string
+		lineageTag: 5c427826-56c2-4b02-a244-6a374390e161
+		summarizeBy: none
+		sourceColumn: NombreCliente
+
+		annotation SummarizationSetBy = Automatic
+
+	column Pais
+		dataType: string
+		lineageTag: baf4deaf-33f0-41f1-80e1-c7925a471612
+		summarizeBy: none
+		sourceColumn: Pais
+
+		annotation SummarizationSetBy = Automatic
+
+	column CategoriaCliente
+		dataType: string
+		lineageTag: dc3a80b8-e17e-42b9-a788-4b090453643a
+		summarizeBy: none
+		sourceColumn: CategoriaCliente
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_cliente_ERP = m
+		mode: import
+		source =
+				let
+				  Source = Csv.Document(File.Contents("C:\Users\Admin\Downloads\Prueba_técnica_-_Data_Governance_&_Data_Quality_Analyst\data\dim_cliente_ERP.csv"), [Delimiter = ",", Columns = 4, QuoteStyle = QuoteStyle.None]),
+				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"CustomerID", Int64.Type}, {"NombreCliente", type text}, {"Pais", type text}, {"CategoriaCliente", type text}})
+				in
+				  #"Changed column type"
+
+	annotation PBI_ResultType = Table
+

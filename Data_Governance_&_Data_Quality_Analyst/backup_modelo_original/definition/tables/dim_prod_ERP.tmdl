@@ -1,0 +1,38 @@
+table dim_prod_ERP
+	lineageTag: a4d31e33-957b-4a65-821d-773fb952ac30
+
+	column StockCode
+		dataType: string
+		lineageTag: 788220a0-1c1f-4b5f-b515-a01eb956f1ad
+		summarizeBy: none
+		sourceColumn: StockCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column Descripcion
+		dataType: string
+		lineageTag: 9584edf6-e8dc-4dab-a813-e6833d0badb5
+		summarizeBy: none
+		sourceColumn: Descripcion
+
+		annotation SummarizationSetBy = Automatic
+
+	column CategoriaProducto
+		dataType: string
+		lineageTag: 5c8aaa1f-c1d8-4503-8099-8a3087a50021
+		summarizeBy: none
+		sourceColumn: CategoriaProducto
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_prod_ERP = m
+		mode: import
+		source =
+				let
+				  Source = Csv.Document(File.Contents("C:\Users\Admin\Downloads\Prueba_técnica_-_Data_Governance_&_Data_Quality_Analyst\data\dim_prod_ERP.csv"), [Delimiter = ",", Columns = 3, QuoteStyle = QuoteStyle.None]),
+				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true])
+				in
+				  #"Promoted headers"
+
+	annotation PBI_ResultType = Table
+

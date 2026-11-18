@@ -1,0 +1,82 @@
+table raw_data_ERP
+	lineageTag: 36f50cee-54e6-47b9-bb38-9ee30ea98b33
+
+	column InvoiceNo
+		dataType: int64
+		formatString: 0
+		lineageTag: 06c01a8e-e633-4f1c-95eb-37039bf68c64
+		summarizeBy: sum
+		sourceColumn: InvoiceNo
+
+		annotation SummarizationSetBy = Automatic
+
+	column StockCode
+		dataType: string
+		lineageTag: 9adb1a8b-3f3c-4219-aaf0-d47afabc8bef
+		summarizeBy: none
+		sourceColumn: StockCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: 06213202-3f1f-4104-99c4-2059ad37106d
+		summarizeBy: sum
+		sourceColumn: Quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column InvoiceDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: db3467b6-d79a-4eb1-b53d-7eaa8b3529f8
+		summarizeBy: none
+		sourceColumn: InvoiceDate
+
+		variation Variation
+			isDefault
+			relationship: 5e05c10c-420b-471d-bb83-fcdf6ac75b93
+			defaultHierarchy: LocalDateTable_d2434ed1-5233-4a3d-8bb1-4eecaf791276.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column UnitPrice
+		dataType: double
+		lineageTag: 86096f58-93c4-476a-9be3-747fe84beaa7
+		summarizeBy: sum
+		sourceColumn: UnitPrice
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column CustomerID
+		dataType: int64
+		formatString: 0
+		lineageTag: 6f70a13b-7e77-4478-893a-65cd7642342c
+		summarizeBy: none
+		sourceColumn: CustomerID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		dataType: string
+		lineageTag: 815e0e78-7346-44b4-8a0b-ce7f838b311c
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	partition raw_data_ERP = m
+		mode: import
+		source =
+				let
+				  Source = Csv.Document(File.Contents("C:\Users\Admin\Downloads\Prueba_técnica_-_Data_Governance_&_Data_Quality_Analyst\data\raw_data_ERP.csv"), [Delimiter = ",", Columns = 7, QuoteStyle = QuoteStyle.None]),
+				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"InvoiceNo", Int64.Type}, {"StockCode", type text}, {"Quantity", Int64.Type}, {"InvoiceDate", type datetime}, {"UnitPrice", type number}, {"CustomerID", Int64.Type}, {"Country", type text}})
+				in
+				  #"Changed column type"
+
+	annotation PBI_ResultType = Table
+
